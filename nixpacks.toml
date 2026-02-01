@@ -1,16 +1,17 @@
 [phases.setup]
 nixPkgs = [
   "python310",
-  "python310Packages.pip",
+  "python310Packages.virtualenv",
   "gcc"
 ]
 
 [phases.install]
 cmds = [
   "python -V",
-  "pip --version",
-  "pip install -r requirements.txt"
+  "python -m venv /app/venv",
+  "source /app/venv/bin/activate && pip install --upgrade pip",
+  "source /app/venv/bin/activate && pip install -r requirements.txt"
 ]
 
 [start]
-cmd = "gunicorn app:app --bind 0.0.0.0:$PORT"
+cmd = "source /app/venv/bin/activate && gunicorn app:app --bind 0.0.0.0:$PORT"
